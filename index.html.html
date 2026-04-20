@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Biblioteca — Prompts & Recursos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #FAFAFA; --bg-card: #FFFFFF; --bg-surface: #F4F4F5;
+    --text: #09090B; --text-muted: #71717A;
+    --border: #E4E4E7; --border-hover: #A1A1AA;
+    --accent: #2563EB; --radius-sm: 8px; --radius-md: 12px; --radius-lg: 16px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.06); --green: #10B981; --red: #EF4444;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #09090B; --bg-card: #18181B; --bg-surface: #27272A;
+      --text: #FAFAFA; --text-muted: #A1A1AA;
+      --border: #3F3F46; --border-hover: #71717A; --accent: #3B82F6;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+  }
+  body { font-family: 'Archivo', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.6; }
+  header { padding: 1.25rem 2rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap; position: sticky; top: 0; background: var(--bg); z-index: 10; }
+  .logo { font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; letter-spacing: -0.5px; }
+  .logo span { color: var(--accent); }
+  .header-right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+  .toolbar { padding: 1rem 2rem; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; border-bottom: 1px solid var(--border); }
+  input[type="text"], input[type="password"], select, textarea {
+    font-family: 'Archivo', sans-serif; font-size: 14px; background: var(--bg-card); color: var(--text);
+    border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 8px 12px; outline: none; transition: border-color .15s;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
+  #search { flex: 1; min-width: 180px; }
+  select { cursor: pointer; }
+  button {
+    font-family: 'Space Grotesk', sans-serif; font-size: 13px; font-weight: 500; cursor: pointer;
+    border-radius: var(--radius-sm); padding: 8px 16px; transition: all .15s;
+    border: 1px solid var(--border); background: var(--bg-card); color: var(--text);
+  }
+  button:hover { background: var(--bg-surface); border-color: var(--border-hover); }
+  button:active { transform: scale(0.98); }
+  .btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+  .btn-primary:hover { opacity: 0.85; background: var(--text); }
+  .btn-sm { font-size: 12px; padding: 5px 12px; }
+  .btn-danger { color: var(--red); border-color: var(--red); }
+  .btn-danger:hover { background: #FEF2F2; }
+  .status-bar { padding: 0.6rem 2rem; display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--text-muted); border-bottom: 1px solid var(--border); gap: 8px; flex-wrap: wrap; }
+  .sync-pill { display: flex; align-items: center; gap: 5px; background: var(--bg-surface); padding: 3px 10px; border-radius: 99px; font-size: 11px; cursor: pointer; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; transition: background .3s; }
+  .dot.green { background: var(--green); }
+  .dot.yellow { background: #F59E0B; }
+  .dot.red { background: var(--red); }
+  .dot.spinning { background: var(--accent); animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+  main { padding: 1.5rem 2rem; max-width: 1100px; margin: 0 auto; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; }
+  .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; gap: 10px; box-shadow: var(--shadow); transition: border-color .15s, box-shadow .15s; }
+  .card:hover { border-color: var(--border-hover); box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+  .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+  .card-title { font-family: 'Space Grotesk', sans-serif; font-size: 14px; font-weight: 500; line-height: 1.3; flex: 1; }
+  .card-menu { display: flex; gap: 2px; }
+  .icon-btn { background: none; border: none; padding: 3px 6px; font-size: 13px; color: var(--text-muted); border-radius: 4px; cursor: pointer; }
+  .icon-btn:hover { background: var(--bg-surface); color: var(--text); border: none; }
+  .card-body { font-size: 13px; color: var(--text-muted); line-height: 1.55; flex: 1; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; white-space: pre-wrap; word-break: break-word; }
+  .card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 8px; border-top: 1px solid var(--border); }
+  .badge { font-size: 11px; font-weight: 500; padding: 3px 10px; border-radius: 99px; }
+  .badge-diseño { background: #EFF6FF; color: #1D4ED8; }
+  .badge-comunicacion { background: #F5F3FF; color: #6D28D9; }
+  .badge-codigo { background: #ECFDF5; color: #065F46; }
+  .badge-otro { background: var(--bg-surface); color: var(--text-muted); }
+  @media (prefers-color-scheme: dark) {
+    .badge-diseño { background: #1E3A5F; color: #93C5FD; }
+    .badge-comunicacion { background: #2E1065; color: #C4B5FD; }
+    .badge-codigo { background: #064E3B; color: #6EE7B7; }
+  }
+  .copy-btn { font-size: 11px; padding: 3px 10px; color: var(--text-muted); border-color: var(--border); }
+  .copy-btn.copied { color: var(--green); border-color: var(--green); }
+  .empty { grid-column: 1/-1; text-align: center; padding: 4rem 1rem; color: var(--text-muted); }
+  .empty p { font-size: 14px; margin-top: 8px; }
+  #setup-screen { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; align-items: center; justify-content: center; padding: 1.5rem; }
+  #setup-screen.open { display: flex; }
+  .setup-box { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 2rem; width: 100%; max-width: 440px; box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
+  .setup-box h2 { font-family: 'Space Grotesk', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: -0.5px; }
+  .setup-box h2 span { color: var(--accent); }
+  .setup-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.6; }
+  .setup-field { margin-bottom: 14px; }
+  .setup-field label { font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 5px; font-weight: 500; }
+  .setup-field input { width: 100%; font-size: 13px; }
+  .setup-field small { font-size: 11px; color: var(--text-muted); margin-top: 4px; display: block; }
+  .setup-footer { display: flex; justify-content: flex-end; margin-top: 1.5rem; }
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.4); z-index: 100; align-items: center; justify-content: center; padding: 1rem; }
+  .overlay.open { display: flex; }
+  .modal { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; width: 100%; max-width: 500px; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+  .modal h2 { font-family: 'Space Grotesk', sans-serif; font-size: 17px; font-weight: 700; margin-bottom: 1.25rem; letter-spacing: -0.3px; }
+  .field { margin-bottom: 14px; }
+  .field label { font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 5px; font-weight: 500; }
+  .field input, .field select { width: 100%; }
+  .field textarea { width: 100%; height: 120px; resize: vertical; line-height: 1.55; }
+  .modal-footer { display: flex; justify-content: flex-end; gap: 8px; margin-top: 1.25rem; }
+  #import-file { display: none; }
+  .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(80px); background: var(--text); color: var(--bg); font-size: 13px; padding: 10px 20px; border-radius: 99px; transition: transform .25s ease; z-index: 300; white-space: nowrap; }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  @media (max-width: 600px) { header, .toolbar, main, .status-bar { padding-left: 1rem; padding-right: 1rem; } }
+</style>
+</head>
+<body>
+
+<div id="setup-screen" class="open">
+  <div class="setup-box">
+    <h2>mi<span>biblioteca</span></h2>
+    <p>Para sincronizar tus recursos en cualquier dispositivo, conectá tu cuenta de GitHub. Tus credenciales se guardan solo en este navegador y nunca se envían a ningún servidor externo.</p>
+    <div class="setup-field">
+      <label>GitHub Personal Access Token</label>
+      <input type="password" id="setup-token" placeholder="ghp_...">
+      <small>github.com/settings/tokens → Generate new token (classic) → tildá solo "gist"</small>
+    </div>
+    <div class="setup-field">
+      <label>Gist ID</label>
+      <input type="text" id="setup-gist" placeholder="e8c126c7993d26e25bdd0d13b5ba002d">
+      <small>La parte final de la URL de tu Gist: gist.github.com/tuusuario/<strong>este-id</strong></small>
+    </div>
+    <div class="setup-footer">
+      <button class="btn-primary" onclick="setupSave()">Conectar →</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="logo">mi<span>biblioteca</span></div>
+  <div class="header-right">
+    <button class="btn-sm" onclick="exportData()">Exportar JSON</button>
+    <button class="btn-sm" onclick="document.getElementById('import-file').click()">Importar JSON</button>
+    <input type="file" id="import-file" accept=".json" onchange="importData(event)">
+    <button class="btn-sm btn-danger" onclick="resetSetup()">Desconectar</button>
+    <button class="btn-primary" onclick="openModal()">+ Agregar</button>
+  </div>
+</header>
+
+<div class="toolbar">
+  <input type="text" id="search" placeholder="Buscar en tu biblioteca... (Cmd+K)" oninput="render()">
+  <select id="cat-filter" onchange="render()">
+    <option value="">Todas</option>
+    <option value="diseño">Diseño</option>
+    <option value="comunicacion">Comunicación</option>
+    <option value="codigo">Código</option>
+    <option value="otro">Otro</option>
+  </select>
+</div>
+
+<div class="status-bar">
+  <span id="count-label"></span>
+  <div class="sync-pill" onclick="syncNow()" title="Click para sincronizar">
+    <div class="dot green" id="sync-dot"></div>
+    <span id="sync-label">Sincronizado con GitHub</span>
+  </div>
+</div>
+
+<main>
+  <div class="grid" id="cards"></div>
+</main>
+
+<div class="overlay" id="overlay" onclick="handleOverlayClick(event)">
+  <div class="modal">
+    <h2 id="modal-title">Nuevo recurso</h2>
+    <div class="field">
+      <label>Título</label>
+      <input type="text" id="f-title" placeholder="Ej: Prompt para copy de Instagram">
+    </div>
+    <div class="field">
+      <label>Contenido / Prompt / Snippet</label>
+      <textarea id="f-body" placeholder="Pegá acá el prompt, código, referencia, paleta de colores..."></textarea>
+    </div>
+    <div class="field">
+      <label>Categoría</label>
+      <select id="f-cat">
+        <option value="diseño">Diseño</option>
+        <option value="comunicacion">Comunicación</option>
+        <option value="codigo">Código</option>
+        <option value="otro">Otro</option>
+      </select>
+    </div>
+    <div class="modal-footer">
+      <button onclick="closeModal()">Cancelar</button>
+      <button class="btn-primary" onclick="save()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const GIST_FILE = 'mibiblioteca.json';
+const DEMO = [
+  { id: 'd1', title: 'Prompt para brief de cliente', body: 'Actuá como consultor de comunicación digital. Hacé preguntas para entender el proyecto del cliente: objetivos, audiencia, tono de marca, competencia y entregables esperados. Organizá las preguntas por bloques temáticos.', cat: 'comunicacion', ts: Date.now() - 86400000 },
+  { id: 'd2', title: 'Paleta minimalista portfolio', body: 'Fondo: #FAFAFA\nTexto: #09090B\nAccento: #2563EB\nMuted: #64748B\nBorder: #E4E4E7\n\nTipografía:\n— Space Grotesk (títulos)\n— Archivo (cuerpo)', cat: 'diseño', ts: Date.now() - 7200000 },
+  { id: 'd3', title: 'Copiar al portapapeles (JS)', body: 'navigator.clipboard.writeText(text)\n  .then(() => console.log("copiado!"))\n  .catch(err => console.error(err))', cat: 'codigo', ts: Date.now() - 3600000 },
+  { id: 'd4', title: 'Caption Instagram producto', body: 'Escribí un caption para Instagram que presente [producto] de forma auténtica. Tono: cercano pero profesional. Incluí un hook en la primera línea, beneficio principal, CTA suave al final. Máximo 150 palabras. Hashtags separados.', cat: 'comunicacion', ts: Date.now() }
+];
+
+let items = [], editId = null, TOKEN = '', GIST_ID = '';
+
+function getConfig() {
+  TOKEN = localStorage.getItem('mb-token') || '';
+  GIST_ID = localStorage.getItem('mb-gist') || '';
+}
+
+function setupSave() {
+  const token = document.getElementById('setup-token').value.trim();
+  const gist = document.getElementById('setup-gist').value.trim();
+  if (!token || !gist) { showToast('Completá los dos campos'); return; }
+  localStorage.setItem('mb-token', token);
+  localStorage.setItem('mb-gist', gist);
+  TOKEN = token; GIST_ID = gist;
+  document.getElementById('setup-screen').classList.remove('open');
+  init();
+}
+
+function resetSetup() {
+  if (!confirm('¿Desconectar GitHub? Tus datos en el Gist no se borran.')) return;
+  localStorage.removeItem('mb-token');
+  localStorage.removeItem('mb-gist');
+  location.reload();
+}
+
+async function init() {
+  getConfig();
+  if (!TOKEN || !GIST_ID) { document.getElementById('setup-screen').classList.add('open'); return; }
+  document.getElementById('setup-screen').classList.remove('open');
+  setSyncStatus('loading', 'Cargando...');
+  await loadFromGist();
+  render();
+}
+
+async function loadFromGist() {
+  try {
+    const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+      headers: { Authorization: `token ${TOKEN}`, Accept: 'application/vnd.github.v3+json' }
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const data = await res.json();
+    const file = data.files[GIST_FILE];
+    if (file && file.content) {
+      const parsed = JSON.parse(file.content);
+      items = Array.isArray(parsed) && parsed.length > 0 ? parsed : [...DEMO];
+    } else {
+      items = [...DEMO];
+      await pushToGist();
+    }
+    setSyncStatus('ok', 'Sincronizado · ' + new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }));
+  } catch(e) {
+    setSyncStatus('error', 'Error al conectar — revisá el token');
+    showToast('No se pudo conectar con GitHub');
+    items = [];
+  }
+}
+
+async function pushToGist() {
+  setSyncStatus('loading', 'Guardando...');
+  try {
+    const res = await fetch(`https://api.github.com/gists/${GIST_ID}`, {
+      method: 'PATCH',
+      headers: { Authorization: `token ${TOKEN}`, Accept: 'application/vnd.github.v3+json', 'Content-Type': 'application/json' },
+      body: JSON.stringify({ files: { [GIST_FILE]: { content: JSON.stringify(items, null, 2) } } })
+    });
+    if (!res.ok) throw new Error();
+    setSyncStatus('ok', 'Guardado · ' + new Date().toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' }));
+  } catch(e) {
+    setSyncStatus('error', 'Error al guardar');
+    showToast('No se pudo guardar en GitHub');
+  }
+}
+
+async function syncNow() {
+  setSyncStatus('loading', 'Sincronizando...');
+  await loadFromGist();
+  render();
+  showToast('Sincronizado');
+}
+
+function setSyncStatus(state, label) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  dot.className = 'dot ' + (state === 'ok' ? 'green' : state === 'loading' ? 'spinning' : state === 'error' ? 'red' : 'yellow');
+  lbl.textContent = label;
+}
+
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function catBadge(cat) {
+  const labels = { diseño: 'Diseño', comunicacion: 'Comunicación', codigo: 'Código', otro: 'Otro' };
+  return `<span class="badge badge-${cat}">${labels[cat] || cat}</span>`;
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const cf = document.getElementById('cat-filter').value;
+  const filtered = items.filter(i => (!q || i.title.toLowerCase().includes(q) || i.body.toLowerCase().includes(q)) && (!cf || i.cat === cf)).sort((a,b) => b.ts - a.ts);
+  document.getElementById('count-label').textContent = filtered.length === items.length ? `${items.length} recurso${items.length !== 1 ? 's' : ''}` : `${filtered.length} de ${items.length} recursos`;
+  const container = document.getElementById('cards');
+  if (!filtered.length) { container.innerHTML = `<div class="empty"><div style="font-size:32px">📭</div><p>${items.length === 0 ? 'Tu biblioteca está vacía. Agregá tu primer recurso.' : 'Sin resultados.'}</p></div>`; return; }
+  container.innerHTML = filtered.map(item => `
+    <div class="card">
+      <div class="card-header">
+        <div class="card-title">${esc(item.title)}</div>
+        <div class="card-menu">
+          <button class="icon-btn" title="Editar" onclick="openModal('${item.id}')">✎</button>
+          <button class="icon-btn" title="Eliminar" onclick="del('${item.id}')">✕</button>
+        </div>
+      </div>
+      <div class="card-body">${esc(item.body)}</div>
+      <div class="card-footer">
+        ${catBadge(item.cat)}
+        <button class="copy-btn btn-sm" id="cp-${item.id}" onclick="copy('${item.id}')">Copiar</button>
+      </div>
+    </div>`).join('');
+}
+
+function copy(id) {
+  const item = items.find(i => i.id === id);
+  if (!item) return;
+  navigator.clipboard.writeText(item.body).then(() => {
+    const btn = document.getElementById('cp-' + id);
+    if (btn) { btn.textContent = '✓ Copiado'; btn.classList.add('copied'); setTimeout(() => { btn.textContent = 'Copiar'; btn.classList.remove('copied'); }, 1800); }
+  });
+}
+
+function openModal(id = null) {
+  editId = id;
+  const item = id ? items.find(i => i.id === id) : null;
+  document.getElementById('modal-title').textContent = id ? 'Editar recurso' : 'Nuevo recurso';
+  document.getElementById('f-title').value = item ? item.title : '';
+  document.getElementById('f-body').value = item ? item.body : '';
+  document.getElementById('f-cat').value = item ? item.cat : 'diseño';
+  document.getElementById('overlay').classList.add('open');
+  setTimeout(() => document.getElementById('f-title').focus(), 50);
+}
+
+function closeModal() { document.getElementById('overlay').classList.remove('open'); editId = null; }
+function handleOverlayClick(e) { if (e.target === document.getElementById('overlay')) closeModal(); }
+
+async function save() {
+  const title = document.getElementById('f-title').value.trim();
+  const body = document.getElementById('f-body').value.trim();
+  const cat = document.getElementById('f-cat').value;
+  if (!title || !body) { showToast('Completá el título y el contenido'); return; }
+  if (editId) { const idx = items.findIndex(i => i.id === editId); if (idx > -1) items[idx] = { ...items[idx], title, body, cat, ts: Date.now() }; }
+  else { items.unshift({ id: 'i' + Date.now(), title, body, cat, ts: Date.now() }); }
+  closeModal(); render(); await pushToGist();
+}
+
+async function del(id) {
+  if (!confirm('¿Eliminar este recurso?')) return;
+  items = items.filter(i => i.id !== id); render(); await pushToGist();
+}
+
+function exportData() {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(items, null, 2)], { type: 'application/json' }));
+  a.download = 'mibiblioteca-backup.json'; a.click();
+}
+
+function importData(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async (ev) => {
+    try {
+      const parsed = JSON.parse(ev.target.result);
+      if (!Array.isArray(parsed)) throw new Error();
+      const existing = new Set(items.map(i => i.id));
+      const newItems = parsed.filter(i => !existing.has(i.id));
+      items = [...items, ...newItems]; render(); await pushToGist();
+      showToast(`${newItems.length} recurso(s) importado(s)`);
+    } catch { showToast('Archivo inválido'); }
+  };
+  reader.readAsText(file); e.target.value = '';
+}
+
+let toastTimer;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); document.getElementById('search').focus(); }
+});
+
+init();
+</script>
+</body>
+</html>
